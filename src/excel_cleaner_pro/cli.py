@@ -8,7 +8,7 @@ from collections import Counter
 from pathlib import Path
 
 from .api import clean_file
-from .config import ConfigError, default_config_text, load_config
+from .config import ConfigError, default_config_text, load_config, option_overrides
 from .version import __version__
 
 
@@ -65,16 +65,12 @@ def main(argv: list[str] | None = None) -> int:
     if not args.input:
         parser.error("an input file is required")
 
-    overrides: dict = {}
-    if args.no_fuzzy:
-        overrides["dedupe"] = {"fuzzy": False}
-    if args.fuzzy_remove:
-        overrides.setdefault("dedupe", {})["fuzzy_action"] = "remove"
-    if args.header_row:
-        overrides["input"] = {"header_row": args.header_row}
-    if args.date_order:
-        overrides["dates"] = {"order": args.date_order}
-
+    overrides = option_overrides(
+        no_fuzzy=args.no_fuzzy,
+        fuzzy_remove=args.fuzzy_remove,
+        header_row=args.header_row,
+        date_order=args.date_order,
+    )
     src = Path(args.input)
     out = Path(args.output) if args.output else src.with_name(f"{src.stem}_cleaned.xlsx")
     try:

@@ -56,6 +56,26 @@ def _merge(base: dict[str, Any], override: dict[str, Any], path: str = "") -> di
     return out
 
 
+def option_overrides(
+    *,
+    no_fuzzy: bool = False,
+    fuzzy_remove: bool = False,
+    header_row: int | None = None,
+    date_order: str | None = None,
+) -> dict[str, Any]:
+    """Turn the command line switches (also used by the web app) into config overrides."""
+    overrides: dict[str, Any] = {}
+    if no_fuzzy:
+        overrides["dedupe"] = {"fuzzy": False}
+    if fuzzy_remove:
+        overrides.setdefault("dedupe", {})["fuzzy_action"] = "remove"
+    if header_row:
+        overrides["input"] = {"header_row": header_row}
+    if date_order:
+        overrides["dates"] = {"order": date_order}
+    return overrides
+
+
 def load_config(path: str | Path | None = None, overrides: dict[str, Any] | None = None) -> Config:
     raw = tomllib.loads(default_config_text())
     if path is not None:

@@ -71,6 +71,20 @@ result = clean_file("customers.xlsx", "customers_cleaned.xlsx")
 print(result.rows_in, result.rows_out, len(result.changes), len(result.issues))
 ```
 
+## Try it in the browser
+
+A small local web app runs the same library: upload a CSV or XLSX file, see the cleaned rows with
+changed cells highlighted (and the same rows as typed), the change log, the review list, the
+removed rows, and download the cleaned workbook. It runs on your machine; usage stats are
+switched off in `.streamlit/config.toml`.
+
+```
+.venv\Scripts\python -m pip install ".[app]"
+.venv\Scripts\streamlit run app\streamlit_app.py
+```
+
+The page opens at http://localhost:8501. Try it with `samples\messy_customers.csv`.
+
 ## How it works
 
 1. **Reads the file and reports what it hides.** CSV (comma, semicolon, tab or pipe) or every sheet
@@ -146,7 +160,7 @@ multi-row headers are reported, not restructured. Full list: [LIMITATIONS.md](LI
 ## Develop
 
 ```
-.venv\Scripts\python -m pip install -e ".[dev]"
+.venv\Scripts\python -m pip install -e ".[dev,app]"
 .venv\Scripts\python -m pytest
 .venv\Scripts\python -m ruff check .
 .venv\Scripts\python benchmark\run_benchmark.py

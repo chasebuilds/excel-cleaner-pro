@@ -14,6 +14,7 @@ dependencies = ["openpyxl>=3.1", "rapidfuzz>=3.6"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
+app = ["streamlit>=1.37"]
 
 [project.scripts]
 excel-cleaner = "excel_cleaner_pro.cli:main"
@@ -35,3 +36,6 @@ src = ["src", "tests", "benchmark"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["excel_cleaner_pro", "app"]
