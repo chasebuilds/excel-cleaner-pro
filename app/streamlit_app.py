@@ -114,7 +114,7 @@ def removed_rows(result: CleanResult) -> list[dict[str, Any]]:
     ]  # fmt: skip
 
 
-def main() -> None:  # pragma: no cover - UI wiring, exercised by hand in the browser
+def main() -> None:
     import pandas as pd
     import streamlit as st
 

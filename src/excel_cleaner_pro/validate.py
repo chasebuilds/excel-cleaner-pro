@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import re
 from collections import Counter
+from collections.abc import Callable
 from typing import Any
 
 from .config import Config
 from .model import RuleResult, SheetResult
 
 
-def _check(sheet: SheetResult, rule: str, column: str, bad) -> RuleResult:
+def _check(sheet: SheetResult, rule: str, column: str, bad: Callable[..., bool]) -> RuleResult:
     if column not in sheet.headers:
         return RuleResult(rule, column, "column not found", [])
     col = sheet.headers.index(column)
@@ -47,7 +48,7 @@ def run_rules(sheet: SheetResult, cfg: Config) -> list[RuleResult]:
         )  # fmt: skip
     for column, (low, high) in rules["range"].items():
 
-        def outside(value: Any, _, low=low, high=high) -> bool:
+        def outside(value: Any, _: Any, low: Any = low, high: Any = high) -> bool:
             if value is None:
                 return False
             # text in a numeric column is out of range by definition: it cannot be compared

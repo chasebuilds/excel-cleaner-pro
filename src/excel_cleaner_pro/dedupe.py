@@ -93,7 +93,9 @@ def handle_fuzzy(sheet: SheetResult, cfg: Config) -> None:
     )
     sheet.notes.append(f"fuzzy duplicates compared on: {label} ({action})")
 
-    kept_rows, kept_src, kept_norm = [], [], []
+    kept_rows: list[list[Any]] = []
+    kept_src: list[int] = []
+    kept_norm: list[list[str]] = []
     # one list per key column, plus a word-sorted copy for name columns
     kept_by_key: list[list[str]] = [[] for _ in keys]
     kept_sorted: list[list[str]] = [[] for _ in keys]

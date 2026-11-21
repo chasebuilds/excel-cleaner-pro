@@ -13,6 +13,7 @@ from typing import Any
 
 from openpyxl import load_workbook
 from openpyxl.utils.datetime import CALENDAR_MAC_1904
+from openpyxl.worksheet.worksheet import Worksheet
 
 from .config import Config
 from .model import ReadIssue, Table
@@ -94,7 +95,7 @@ def read_csv(path: Path, cfg: Config) -> list[Table]:
     return [table]
 
 
-def _inspect(ws, ws_formulas, table: Table) -> None:
+def _inspect(ws: Worksheet, ws_formulas: Worksheet, table: Table) -> None:
     """Add notes and issues for structure that a values-only read would hide."""
     if ws.sheet_state != "visible":
         table.notes.append("this sheet is hidden in the workbook; it was read like any other")
@@ -125,7 +126,7 @@ def _inspect(ws, ws_formulas, table: Table) -> None:
     formulas = 0
     for row in ws_formulas.iter_rows():
         for cell in row:
-            if cell.data_type != "f":
+            if cell.data_type != "f" or cell.row is None or cell.column is None:
                 continue
             formulas += 1
             if ws.cell(cell.row, cell.column).value is None:

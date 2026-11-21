@@ -242,6 +242,8 @@ class _ColumnCleaner:
                 )
                 continue
             value = p.value if p.kind == "ok" else (p.us if reading == "us" else p.eu)
+            if value is None:  # parse_number sets the reading for ok and ambiguous results
+                continue
             if as_currency:
                 value = round(float(value), 2)
             # a bare literal such as 1250.00 only changes type, not meaning, so it is not logged
@@ -383,8 +385,7 @@ def clean_table(table: Table, cfg: Config | None = None) -> SheetResult:
         cleaner.scan_text()
         rule_switch = {"name": "name_case", "date": "dates", "number": "numbers",
                        "currency": "numbers", "state": "states"}  # fmt: skip
-        rule_switch = rule_switch.get(col_type, col_type)
-        if col_type in ("text", "id") or cfg.rules.get(rule_switch, False):
+        if col_type in ("text", "id") or cfg.rules.get(rule_switch.get(col_type, col_type), False):
             getattr(cleaner, col_type)()
 
     numeric = [i for i, c in enumerate(sheet.columns) if c.type in ("number", "currency")]

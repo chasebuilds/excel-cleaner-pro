@@ -163,10 +163,13 @@ multi-row headers are reported, not restructured. Full list: [LIMITATIONS.md](LI
 
 ## Develop
 
+CI runs ruff, mypy on `src/` and the tests with a coverage report on Python 3.11 and 3.13.
+
 ```
 .venv\Scripts\python -m pip install -e ".[dev,app]"
-.venv\Scripts\python -m pytest
+.venv\Scripts\python -m pytest --cov
 .venv\Scripts\python -m ruff check .
+.venv\Scripts\python -m mypy
 .venv\Scripts\python benchmark\run_benchmark.py
 ```
 

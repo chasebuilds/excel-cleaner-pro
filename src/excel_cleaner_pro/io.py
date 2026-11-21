@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Set
 from pathlib import Path
 from typing import Any
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.worksheet import Worksheet
 
 from .config import Config
 from .model import CleanResult, SheetResult
@@ -21,8 +23,8 @@ EXCEL_MAX_DATA_ROWS = 1_048_575
 
 
 def _write_sheet(
-    ws, headers: list[str], rows: list[list[Any]], number_cols: set[int] = frozenset()
-):
+    ws: Worksheet, headers: list[str], rows: list[list[Any]], number_cols: Set[int] = frozenset()
+) -> None:
     if len(rows) > EXCEL_MAX_DATA_ROWS:
         raise ValueError(
             f"sheet {ws.title!r} would need {len(rows):,} rows; an Excel sheet holds "
@@ -54,14 +56,14 @@ def _write_sheet(
         ws.auto_filter.ref = ws.dimensions
 
 
-def _write_lines(ws, rows: list[list[Any]], first_width: int = 34) -> None:
+def _write_lines(ws: Worksheet, rows: list[list[Any]], first_width: int = 34) -> None:
     for row in rows:
         ws.append(row)
     ws.column_dimensions["A"].width = first_width
     for letter in "BCDEFGHI":
         ws.column_dimensions[letter].width = 18
-    for row in ws.iter_rows(min_col=1, max_col=1):
-        cell = row[0]
+    for cells in ws.iter_rows(min_col=1, max_col=1):
+        cell = cells[0]
         if isinstance(cell.value, str) and cell.value.startswith("## "):
             cell.value = cell.value[3:]
             cell.font = Font(bold=True)
@@ -199,7 +201,8 @@ def _dictionary_rows(sheet: SheetResult) -> list[list[Any]]:
     for col, report in enumerate(sheet.columns):
         values = [row[col] for row in sheet.rows if row[col] is not None]
         numbers = [v for v in values if isinstance(v, int | float) and not isinstance(v, bool)]
-        low = high = None
+        low: float | str | None = None
+        high: float | str | None = None
         if numbers and len(numbers) >= len(values) / 2:
             low, high = min(numbers), max(numbers)
         elif report.type == "date":
@@ -231,7 +234,7 @@ def _dictionary_rows(sheet: SheetResult) -> list[list[Any]]:
 
 def write_workbook(result: CleanResult, path: str | Path, cfg: Config) -> None:
     book = Workbook()
-    readme = book.active
+    readme = book.worksheets[0]
     readme.title = "Read me first"
     used: set[str] = {
         "read me first", "changes", "removed", "issues", "validation", "data dictionary", "summary",

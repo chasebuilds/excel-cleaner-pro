@@ -8,3 +8,7 @@ dist/
 .ruff_cache/
 *_cleaned.xlsx
 ~$*.xlsx
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/

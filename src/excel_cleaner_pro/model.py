@@ -122,7 +122,7 @@ class SheetResult:
 class CleanResult:
     source: str
     sheets: list[SheetResult]
-    manifest: dict[str, str] = field(default_factory=dict)
+    manifest: dict[str, Any] = field(default_factory=dict)
 
     @property
     def changes(self) -> list[Change]:

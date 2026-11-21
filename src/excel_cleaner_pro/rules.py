@@ -292,9 +292,9 @@ def parse_number(text: str) -> NumberResult:
 
     head, tail = s.split(sep)
     if len(tail) == 3 and 1 <= len(head) <= 3 and not head.startswith("0"):
-        grouped, decimal = int(head + tail), float(f"{head}.{tail}")
-        us, eu = (grouped, decimal) if sep == "," else (decimal, grouped)
-        return NumberResult("ambiguous", us=sign * us, eu=sign * eu, currency=currency)
+        grouped, as_decimal = int(head + tail), float(f"{head}.{tail}")
+        us_read, eu_read = (grouped, as_decimal) if sep == "," else (as_decimal, grouped)
+        return NumberResult("ambiguous", us=sign * us_read, eu=sign * eu_read, currency=currency)
     return done(float(f"{head}.{tail}"), "us" if sep == "." else "eu")
 
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from datetime import date, datetime
 from typing import Any
 
@@ -37,7 +38,7 @@ VALUE_SHARE = 0.8
 HEADER_SHARE = 0.5
 
 
-def _share(values: list[Any], test) -> float:
+def _share(values: list[Any], test: Callable[[Any], object]) -> float:
     return sum(1 for v in values if test(v)) / len(values) if values else 0.0
 
 
