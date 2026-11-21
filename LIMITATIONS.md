@@ -57,6 +57,9 @@ What this tool does not handle, or handles in a way you should know about.
 
 ## Dates
 
+- A column is read as dates when its header says so (`Date`, `DOB`), or with no such header when
+  at least 80% of filled cells look like dates and 60% are readable dates. A messier column than
+  that stays text; set its type in the config (`"Last Order" = "date"`).
 - Read: ISO, `Y/M/D`, numeric with `/`, `-` or `.`, and English month names (`March 5, 2024`,
   `5-Mar-2024`, `05 March 2024`). Not read: other languages, `20240305`, week numbers, quarters,
   month and year alone, Excel serial numbers stored as text. These are flagged `unparsed_date`.

@@ -7,7 +7,7 @@ from datetime import date, datetime
 from typing import Any
 
 from .config import Config
-from .rules import clean_state, is_valid_email, parse_date, parse_number
+from .rules import _MONTHS, clean_state, is_valid_email, parse_date, parse_number
 
 _HEADER_HINTS: list[tuple[str, re.Pattern[str]]] = [
     ("email", re.compile(r"\be ?mail\b")),
@@ -41,8 +41,40 @@ def _share(values: list[Any], test) -> float:
     return sum(1 for v in values if test(v)) / len(values) if values else 0.0
 
 
+# Written like a date even when the date itself is wrong ("4/31/2024", "Aug 2024"). Counts
+# toward finding a date column so the bad cells get flagged instead of the column being skipped.
+# Needs a year, so "12/5", "2024-001", ZIPs, phones and amounts never qualify.
+_DATE_SHAPED = re.compile(
+    r"^(\d{1,2}[-/.]\d{1,2}[-/.](\d{4}|\d{2})|\d{4}[-/.]\d{1,2}[-/.]\d{1,2}"
+    r"|[A-Za-z]{3,9}\.?,?\s+\d{4})$"
+)
+# with no date-like header, this share of cells must be real, readable dates
+DATE_VALID_SHARE = 0.6
+
+
 def _is_date_text(value: Any) -> bool:
     return isinstance(value, str) and parse_date(value).kind != "bad"
+
+
+def _is_date_value(value: Any) -> bool:
+    return isinstance(value, date | datetime) or _is_date_text(value)
+
+
+def _is_date_shaped(value: Any) -> bool:
+    if _is_date_value(value):
+        return True
+    if not isinstance(value, str) or not (m := _DATE_SHAPED.match(value.strip())):
+        return False
+    word = re.match(r"[A-Za-z]+", m.group(0))
+    return word is None or word.group(0).lower() in _MONTHS
+
+
+def _looks_like_date_column(present: list[Any]) -> bool:
+    """Most cells read as dates, counting real Excel dates and date-shaped typos."""
+    return (
+        _share(present, _is_date_value) >= DATE_VALID_SHARE
+        and _share(present, _is_date_shaped) >= VALUE_SHARE
+    )
 
 
 def _is_number_text(value: Any) -> bool:
@@ -63,10 +95,8 @@ def infer_type(header: str, values: list[Any], cfg: Config) -> tuple[str, str]:
             continue
         if col_type == "name" and _NOT_A_PERSON.search(words):
             continue
-        if col_type == "date" and present:
-            fits = _share(present, lambda v: isinstance(v, date | datetime) or _is_date_text(v))
-            if fits < HEADER_SHARE:
-                continue
+        if col_type == "date" and present and _share(present, _is_date_value) < HEADER_SHARE:
+            continue
         if col_type == "state" and _share(texts, lambda v: clean_state(v).value) < HEADER_SHARE:
             continue
         if col_type == "currency" and present:
@@ -77,7 +107,8 @@ def infer_type(header: str, values: list[Any], cfg: Config) -> tuple[str, str]:
 
     if not present:
         return "text", "default"
-    if all(isinstance(v, date | datetime) for v in present):
+    # real Excel dates and typed dates are counted together, so a mixed column is still dates
+    if _looks_like_date_column(present):
         return "date", "values"
     if all(isinstance(v, int | float) and not isinstance(v, bool) for v in present):
         return "number", "values"
@@ -92,6 +123,4 @@ def infer_type(header: str, values: list[Any], cfg: Config) -> tuple[str, str]:
     if _share(texts, _is_number_text) >= VALUE_SHARE:
         has_currency = any(parse_number(v).currency for v in texts)
         return ("currency" if has_currency else "number"), "values"
-    if _share(texts, _is_date_text) >= VALUE_SHARE:
-        return "date", "values"
     return "text", "default"

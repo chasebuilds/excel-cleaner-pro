@@ -78,7 +78,11 @@ print(result.rows_in, result.rows_out, len(result.changes), len(result.issues))
 3. **Basic text cleanup.** Trims whitespace, joins split accent characters (Unicode NFC), turns
    placeholder text (`N/A`, `-`, `null`) into empty cells, sets aside empty rows.
 4. **Works out each column's type** from your config, then the header, then the values:
-   text, id, name, email, phone, date, number, currency or state.
+   text, id, name, email, phone, date, number, currency or state. A column needs no "date" in its
+   header to be read as dates ("Last Order" works): at least 80% of its filled cells must look
+   like dates and at least 60% must be real, readable dates. Real Excel date cells count. Values
+   with no year (`12/5`), ZIPs (`02134`), invoice numbers (`2024-001`), phones and amounts never
+   count, so those columns are not touched.
 5. **Applies that type's rule to each cell.** A value is changed only when there is one reading of
    it. Anything else goes to `Issues` and stays as typed.
 6. **Duplicates.** Exact duplicate rows are removed. Near matches on the key columns (name plus

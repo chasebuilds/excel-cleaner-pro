@@ -146,6 +146,64 @@ def test_type_inference_from_values_and_config_override():
     assert forced.rows == [["x", "(555) 201-0143"]]
 
 
+LAST_ORDER = [
+    "3/4/2024", "2024-03-15", "15.03.2024", "March 5, 2024", datetime(2024, 4, 2),
+    "4/31/2024", "5/6/2024", "6/1/24", "20240607", "07/08/2024", "Aug 2024", None, "9/9/2024",
+]  # fmt: skip
+
+
+def column_type(values, header="Field"):
+    sheet = run([header], [[v] for v in values])
+    return sheet.columns[0].type, sheet.columns[0].type_source
+
+
+def test_date_column_found_from_values_when_header_has_no_date_word():
+    # mixed formats, one real Excel date and some typos: still a date column
+    assert column_type(LAST_ORDER, "Last Order") == ("date", "values")
+    sheet = run(["Last Order"], [[v] for v in LAST_ORDER])
+    cleaned = {r[0] for r in sheet.rows}
+    assert {"2024-03-15", "2024-03-05", "2024-04-02", "2024-09-09"} <= cleaned
+    # bad and two-way dates are flagged and left as typed, not guessed
+    assert {"4/31/2024", "Aug 2024", "3/4/2024"} <= cleaned
+    assert "unparsed_date" in issues_for(sheet, "Last Order")
+    assert "ambiguous_date" in issues_for(sheet, "Last Order")
+
+
+@pytest.mark.parametrize(
+    "values",
+    [
+        ["02134", "02139", "10001", "60614", "94105"],  # ZIPs
+        ["2024-001", "2024-002", "2024-003", "2024-004", "2024-005"],  # invoice numbers
+        ["12/5", "1/2", "3/4", "11/30", "6/7"],  # no year: fraction, score or date
+        ["555-201-3344", "(859) 555-0199", "859.555.0123", "5552010143", "555-0100"],
+        ["$1,200.00", "1200", "(50.00)", "1.200,50", "75"],
+        ["20240607", "20240608", "20240609", "20240610", "20240611"],  # 8-digit IDs
+        ["1.2.3", "2.0.1", "10.4.12", "3.3", "4.1.0"],  # version numbers
+    ],
+    ids=["zip", "invoice", "no-year", "phone", "amount", "8-digit", "version"],
+)
+def test_non_dates_are_never_taken_for_a_date_column(values):
+    kind, _ = column_type(values)
+    assert kind != "date"
+    sheet = run(["Field"], [[v] for v in values])
+    assert not [c for c in sheet.changes if c.rule.startswith("date")]
+
+
+def test_mostly_dates_below_the_bar_stays_text():
+    # 3 of 5 date-shaped is under 80%, so the column is left alone
+    assert column_type(["2024-03-05", "3/6/2024", "4/7/2024", "pending", "n/a later"]) == (
+        "text", "default",
+    )  # fmt: skip
+
+
+def test_header_rule_and_config_override_still_win():
+    assert column_type(["2024-03-05", "pending", "pending"], "Start Date")[0] == "text"
+    assert column_type(["2024-03-05", "3/6/2024", "pending"], "Start Date") == ("date", "header")
+    sheet = run(["Last Order"], [["2024-03-05"], ["3/6/2024"]], columns={"Last Order": "text"})
+    assert sheet.columns[0].type_source == "config"
+    assert sheet.rows == [["2024-03-05"], ["3/6/2024"]]
+
+
 def test_rule_can_be_switched_off():
     sheet = run(["Name"], [["JOHN SMITH"]], rules={"name_case": False})
     assert sheet.rows == [["JOHN SMITH"]]

@@ -72,10 +72,10 @@ End to end: read the CSV, clean, write the XLSX. Median of 3 runs, one process.
 
 | Run | Rows | Seconds | Rows per second |
 |---|---:|---:|---:|
-| Defaults (fuzzy duplicate matching on) | 5297 | 3.21 | 1,650 |
-| `--no-fuzzy` | 5297 | 1.19 | 4,448 |
-| Defaults, larger file (1 run) | 21192 | 49.03 | 432 |
-| `--no-fuzzy`, larger file (1 run) | 21192 | 4.89 | 4,332 |
+| Defaults (fuzzy duplicate matching on) | 5297 | 3.06 | 1,729 |
+| `--no-fuzzy` | 5297 | 1.13 | 4,691 |
+| Defaults, larger file (1 run) | 21192 | 41.80 | 507 |
+| `--no-fuzzy`, larger file (1 run) | 21192 | 3.71 | 5,705 |
 
 Fuzzy matching compares each row with the rows kept before it, so its cost grows with the square of the row count. A rows-per-second figure with fuzzy on holds for that file size only.
 
