@@ -1,0 +1,43 @@
+customer_id,full_name,email,phone,city,state,signup_date,last_order_date,lifetime_value,orders
+C00001,Carol Gomez,Carol.Gomez667@Example.Com,(303) 555-0155,San Diego,CA,2025-01-45,2025-02-20,628.16,36
+C00002,Jacob Thomas,none,(615) 555-0117,Pittsburgh,PA,2025-07-15,,4179.49,8
+C00003,Nicole White,nicole.white106@example.net,(602) 555-0187,Columbus,OH,2021-02-08,17/8/2021,1000.00,30
+C00004,Benjamin Campbell,benjamin.campbell307@example.com,(502) 555-0193,Seattle,WA,2021-01-06,2021-12-29,878.31,5
+C00005,Jessica Perez,jessica.perez776@example.org,502 555 0143,Denver,CO,"June 25, 2024",2025-01-26,1000.00,38
+C00006,Nicholas Lopez,nicholas.lopez968@example.org,(602) 555-0136,Kansas City,mo,2019-09-24,10/25/2019,3266.46,23
+C00007,Robert Rivera,robert.rivera173@example.net,(512) 555-0163,Sacramento  ,CA,2024-07-15,2024-08-14,3033.94,36
+C00008,Emily Parker,emily.parker885@example.net,(312) 555-011,Chicago,IL,8/29/2023,2024-02-28,4009.21,32
+C00009,Katherine Torres,katherine.torres5@example.com,(615) 555-0179,Detroit,MI,2024-12-29,2025-07-06,3360.88,30
+C00010,Layla Gomez,layla.gomez408@example.org,(602) 555-0120,Boston,MA,2020-02-29,01/11/2020,672.71,7
+C00011,James McCarthy,james.mccarthy104@example.org,(502) 555-0177,Portland,OR,15 April 2019,null,6458.98,32
+C00012,Kathleen Flores,kathleen.flores88@example.com,(404) 555-0167,Sacramento,CA,2022-11-04,"November 18, 2023",8711.17,2
+C00013,Ruth Lopez,ruth.lopez713@example.org,(502) 555-0181,Buffalo,New York,2023-02-11,2023-05-07,2356.15,13
+C00014,Steven Robinson,steven.robinson205@example.net,(404) 555-0188,Kansas City,MO,2022-12-27,2024-01-05,500.00,23
+C00015,Timothy Wilson,timothy.wilson233@example.org,(704) 555-0144,Orlando,FL,2022-10-15,,"6.419,06",8
+C00016,Stephanie Sanchez,stephanie.sanchez490@example.com,(303) 555-0192,Detroit,michigan,2022-09-23,2022-11-06,7588.88,2
+C00017,Karen Reyes,karen.reyes826@example.net,(205) 555-0192,Denver	,CO,"Apr 26, 2024",2025-03-28,1654.86,9
+C00018,Sharon Harris,sharon.harris846@example.com,(615) 555-0153,Birmingham,AL	,2021-10-28,,2542.23,23
+C00019,Nicholas O'Brien,nicholas.obrien431@example.net,(617) 555-0100,Denver,CO,"Dec 18, 2024",,216.13,10
+C00020,Eric Thomas,Eric.Thomas570@Example.Com,(205) 555-0131,Louisville,KY,10/24/2024,,8243.69,7
+C00021,Stephen Brown,stephen.brown779@example.com,(602) 555-0165,Minneapolis,MN,2022-08-26,2023-07-05,6375.81,16
+C00022,SOFIA KING,sofia.king945@example.net,none,Orlando,FL,1/8/2024,,"4134,23",20
+C00023,  Jessica Martin,jessica.martin963@example.net,(303) 555-0150,Pittsburgh,PA,2023-02-08,22-Apr-2023,1459.21,15
+C00024,Daniel Khan,daniel.khan414@example.org,(602) 555-0156,Detroit,MI,2021-03-12,2021-09-10,7592.30,34
+C00025,Rachel Rodriguez,rachel.rodriguez116@example.com,(512) 555-0186,Sacramento,CA,2019-12-11,24/04/2020,8188.38,10
+C00026,justin kim,justin.kim718@example,,San Diego,CA	,"February 17, 2022",2022-03-18,1942.50,17
+C00027,William Lewis,william.lewis69@example.org,1-617-555-0116,NULL,CA,2024-02-02,2024-02-07,5819.29,8
+C00028,Daniel White,daniel.white207@example.org,415-555-0144,Pittsburgh,PA,2022-06-03,1/3/2023,3060.45,3
+C00029,Mary St. James,mary.st.james565@example.com,1-704-555-0163,Buffalo,NY,4/28/2024,2024-08-31,"1,134.44",33
+C00014,Steven Robinson,steven.robinson205@example.net,(404) 555-0188,Kansas City,MO,2022-12-27,2024-01-05,500.00,23
+C00030,Michelle Robinson,michelle.robinson351@example.com,,Madison,WI,2020-07-26,2021-02-18,590.30,28
+C00031,Daniel Carter,NA,(415) 555-0157,,TN,2022-02-28,2022-12-31,3092.94,22
+C00032,Scott Jones,scott.jones989@example.org,(704) 555-0125,Orlando,FL,2022-12-31,2023-04-03,3500.00,6
+C00033,Kimberly Jackson,kimberly.jackson410@example.net,(615) 555-0196,Phoenix,AZ,2023-06-02,2023-06-13,6622.56,39
+C00041,Mary t. James,mary.st.james565@example.com,(704) 555-0163,Buffalo,NY,2024-04-28,2024-08-31,1134.44,33
+C00034,Stephanie Kim,stephanie.kim154@example.org,(813) 555-0189,Houston,TX,2020-08-15,,7517.43,34
+C00035,Stephen Williams,stephen.williams847@example.net,(512) 555-0157,Columbus,OH,2021-07-30,2021-09-11,1500.00,35
+C00036,Layla King,layla.king4@example.org,(813) 555-0194,Seattle,WA,2019-10-15,01 November 2020,"€5.631,97",17
+C00037,Steven Clark,steven.clark237@example.net,(205) 555-0178,Pittsburgh,PA,2024-02-29,2024-11-07,824.67,39
+C00038,Charles Hill,charles.hill637@example.net,-,Denver,CO,2019-02-21,2019-10-25,2500.00,34
+C00039,Joshua Reyes,,(615) 555-0157,Charlotte,NC,2021-03-27,2021-09-02,4979.18,14
+C00040,Elizabeth Jackson,elizabeth.jackson766@example.net,(813) 555-0146,Chicago ,IL,"January 12, 2023",2023-03-20,6643.52,32

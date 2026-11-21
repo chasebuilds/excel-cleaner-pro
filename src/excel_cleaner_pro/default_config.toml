@@ -1,0 +1,69 @@
+# excel-cleaner-pro defaults. Change what you need and pass this file with --config.
+# Any key you leave out keeps the value shown here.
+
+[rules]
+whitespace = true        # trim, and collapse runs of spaces, tabs and non-breaking spaces
+placeholders = true      # turn the tokens below into empty cells
+name_case = true         # fix names typed in ALL CAPS or all lower case
+email = true             # lowercase and validate
+phone = true             # normalize US and Canada numbers
+dates = true             # parse to ISO (YYYY-MM-DD)
+numbers = true           # parse currency and number text
+states = true            # US state names to two-letter codes
+unicode_nfc = true       # one form per accented letter (NFC), so equal text compares equal
+
+[input]
+# Row that holds the column names. 0 means find it: the first row that is at least
+# half filled. Rows above it are kept in the Removed sheet.
+header_row = 0
+
+[placeholders]
+tokens = ["n/a", "na", "n.a.", "-", "--", "null", "none", "nan", "#n/a", "?"]
+
+[columns]
+# Force a column's type when the header and values are not enough to tell.
+# Types: text, id, name, email, phone, date, number, currency, state
+# "Cust Tel" = "phone"
+
+[phone]
+format = "national"      # national: (555) 123-4567 | dashes: 555-123-4567 | e164: +15551234567
+
+[dates]
+# infer: read 03/04/2024 by the order the rest of the column proves, flag it when
+#        the column gives no proof or mixed proof
+# flag:  never convert a date that could be day-first or month-first
+# mdy or dmy: always read it that way
+order = "infer"
+infer_min_evidence = 3   # unambiguous dates needed before the column order is trusted
+two_digit_year_pivot = 50  # 49 becomes 2049, 50 becomes 1950
+
+[dedupe]
+exact = true
+fuzzy = true
+# review: a fuzzy match is never removed, it is listed in Issues for a person to decide
+# remove: a match at or above remove_threshold is removed, and blanks in the kept row
+#         are filled from the removed row (each fill is logged in Changes)
+fuzzy_action = "review"
+# Columns compared for fuzzy matching. Empty means auto: every name column plus
+# every email column, and fuzzy matching is skipped when fewer than two are found.
+fuzzy_keys = []
+remove_threshold = 95    # only used when fuzzy_action = "remove"
+review_threshold = 85    # score at or above this: listed in Issues
+
+# Rules the cleaned data must pass. Results go to a Validation sheet. Nothing is
+# changed or removed by a failed rule.
+[validate]
+unique = []              # columns where every filled value must be different
+required = []            # columns that must not be empty
+
+[validate.allowed]
+# state = ["KY", "OH"]
+
+[validate.range]
+# orders = [0, 500]
+
+[validate.pattern]
+# customer_id = '^C\d{5}$'
+
+[output]
+source_row_column = true # first column of Cleaned points back to the input row
