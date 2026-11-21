@@ -71,6 +71,10 @@ result = clean_file("customers.xlsx", "customers_cleaned.xlsx")
 print(result.rows_in, result.rows_out, len(result.changes), len(result.issues))
 ```
 
+[examples/use_as_library.py](examples/use_as_library.py) goes further: custom settings, reading
+the change log and review list from the result, and cleaning rows already in memory with
+`clean_tables`. It runs on the sample file and is checked by the test suite.
+
 ## Try it in the browser
 
 A small local web app runs the same library: upload a CSV or XLSX file, see the cleaned rows with
