@@ -2,6 +2,8 @@
 
 Turns a messy CSV or Excel file into a clean workbook, and shows every change it made.
 
+![Five rows of a messy customer list above, and the same rows cleaned below with changed cells shaded](docs/preview.png)
+
 ## Measured result
 
 On a generated file of 5,297 rows with 6,238 damaged cells (seed 42, default settings, no config file):
