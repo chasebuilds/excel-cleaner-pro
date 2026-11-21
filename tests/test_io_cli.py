@@ -188,3 +188,39 @@ def test_cli_print_config_is_loadable(capsys, tmp_path):
     path = tmp_path / "c.toml"
     path.write_text(capsys.readouterr().out, encoding="utf-8")
     assert load_config(path) == load_config()
+
+
+def test_report_json_counts_match_the_workbook(csv_path, tmp_path):
+    import json
+    from collections import Counter
+
+    out, report_path = tmp_path / "out.xlsx", tmp_path / "report.json"
+    assert main([str(csv_path), "-o", str(out), "--report-json", str(report_path)]) == 0
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    result = clean_file(csv_path)
+
+    assert report["report_format"] == 1
+    assert report["source"] == "messy.csv"
+    assert len(report["input_sha256"]) == 64
+    assert report["rows_unaccounted"] == 0
+    assert report["rows_in"] == result.rows_in
+    assert report["rows_out"] == result.rows_out == len(sheet_rows(out, "Cleaned")) - 1
+    assert report["cells_changed"] == len(sheet_rows(out, "Changes")) - 1
+
+    by_rule = Counter(c.rule for c in result.changes)
+    assert {r: v["cells"] for r, v in report["changes_by_rule"].items()} == dict(by_rule)
+    phone = report["changes_by_rule"]["phone_format"]
+    assert phone["columns"] == {"Phone": phone["cells"]}
+    counts = [v["cells"] for v in report["changes_by_rule"].values()]
+    assert counts == sorted(counts, reverse=True)
+
+    assert report["issues_by_type"] == dict(Counter(i.issue for i in result.issues))
+    assert report["removed_by_reason"] == dict(Counter(r.reason for r in result.removed))
+    [sheet] = report["sheets"]
+    assert sheet["column_types"]["Email"] == "email"
+    assert all(t["balance"] == 0 for t in sheet["control_totals"])
+
+
+def test_report_json_not_written_without_the_flag(csv_path, tmp_path):
+    assert main([str(csv_path), "-o", str(tmp_path / "out.xlsx")]) == 0
+    assert not list(tmp_path.glob("*.json"))

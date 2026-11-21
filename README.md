@@ -154,6 +154,11 @@ One XLSX file:
 | `Data Dictionary` | One line per column: type and how it was decided, filled and missing counts, distinct values, min, max, examples, rules applied. |
 | `Summary` | Row reconciliation, control totals per numeric column, changes by rule, flags by type, placeholder text blanked per column, notes about the file, and the run record: input file SHA-256, tool version, encoding assumed, and every setting used. |
 
+For scripts and pipelines, `--report-json report.json` also writes the counts as JSON: cells
+changed by rule and by column, issues by type, removed rows by reason, column types, control
+totals and validation results, for the whole run and per sheet. From Python, `build_report(result)`
+returns the same dictionary.
+
 ## Limits
 
 US-centric (US and Canada phones, US states, dot-decimal default for numbers). Fuzzy matching is

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from .api import clean_file
 from .config import ConfigError, default_config_text, load_config, option_overrides
+from .report import write_report_json
 from .version import __version__
 
 
@@ -38,6 +39,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--date-order",
         choices=["infer", "flag", "mdy", "dmy"],
         help="how to read dates like 03/04/2024 (default: infer from the column, else flag)",
+    )
+    parser.add_argument(
+        "--report-json",
+        metavar="PATH",
+        help="also write a JSON summary: changes by rule and column, issues by type, "
+        "removed rows by reason, control totals",
     )
     parser.add_argument(
         "--print-config", action="store_true", help="print the default config and exit"
@@ -76,6 +83,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         cfg = load_config(args.config, overrides)
         result = clean_file(src, out, cfg)
+        if args.report_json:
+            write_report_json(result, args.report_json)
     except (ConfigError, ValueError, OSError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
@@ -90,6 +99,8 @@ def main(argv: list[str] | None = None) -> int:
     if any(s.validation for s in result.sheets):
         print(f"  validation rules not passed: {failed}  (sheet Validation)")
     print(f"wrote {out}")
+    if args.report_json:
+        print(f"wrote {args.report_json}")
     return 0
 
 

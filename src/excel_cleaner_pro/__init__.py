@@ -4,6 +4,7 @@ from .api import clean_file, clean_tables
 from .cleaner import clean_table
 from .config import Config, ConfigError, load_config
 from .model import Change, CleanResult, Issue, Removed, SheetResult, Table
+from .report import build_report, write_report_json
 from .version import __version__
 
 __all__ = [
@@ -16,8 +17,10 @@ __all__ = [
     "Removed",
     "SheetResult",
     "Table",
+    "build_report",
     "clean_file",
     "clean_table",
     "clean_tables",
     "load_config",
+    "write_report_json",
 ]
