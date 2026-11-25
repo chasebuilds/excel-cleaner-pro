@@ -185,3 +185,11 @@ CI runs ruff, mypy on `src/` and the tests with a coverage report on Python 3.11
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## More from Chase Builds
+
+- **[pdf-to-excel](https://github.com/chasebuilds/pdf-to-excel)**: Invoice PDFs into one Excel sheet, with a confidence score on every field. 3,600 of 3,600 fields correct. ([live demo](https://chasebuilds.github.io/pdf-to-excel/))
+- **[transaction-categorizer](https://github.com/chasebuilds/transaction-categorizer)**: Sorts bank and card transactions into categories and builds the monthly summary. ([live demo](https://chasebuilds.github.io/transaction-categorizer/))
+- **[data-merger](https://github.com/chasebuilds/data-merger)**: Combines customer lists with different columns into one record per customer. 0 false merges on 28,512 rows. ([live demo](https://chasebuilds.github.io/data-merger/))
+
+[All projects, sorted by industry](https://github.com/chasebuilds) · [chasebuilds.github.io](https://chasebuilds.github.io)
