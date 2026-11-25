@@ -8,8 +8,6 @@
 
 Turns a messy CSV or Excel file into a clean workbook, and shows every change it made.
 
-![Five rows of a messy customer list above, and the same rows cleaned below with changed cells shaded](docs/preview.png)
-
 ## Measured result
 
 On a generated file of 5,297 rows with 6,238 damaged cells (seed 42, default settings, no config file):
@@ -35,6 +33,8 @@ These figures describe generated data. Precision and recall per error type, five
 21,000 row speed run are in [BENCHMARK.md](BENCHMARK.md), which is written by
 `benchmark/run_benchmark.py`, not by hand. On a client file the checks that carry over are the ones
 printed in the workbook itself: row reconciliation, control totals, and the full change log.
+
+![Five rows of a messy customer list above, and the same rows cleaned below with changed cells shaded](docs/preview.png)
 
 ## Before and after
 
